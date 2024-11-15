@@ -619,3 +619,192 @@ This is why modern JavaScript development typically favors `let` (and `const`) o
     const MAX_COUNT = 100;
     const API_BASE_URL = "https://api.example.com";
     ```
+
+# JavaScript and HTML DOM
+
+## DOM Definition
+The Document Object Model (DOM) is a programming interface for HTML documents. It represents the document as a tree-like structure where each node is an object representing a part of the document.
+
+## HTML DOM
+The HTML DOM is created by the browser when a web page loads. It models HTML documents as a tree of objects:
+```
+document
+    └── html
+        ├── head
+        │   ├── title
+        │   └── meta
+        └── body
+            ├── div
+            ├── p
+            └── span
+```
+
+## JavaScript and HTML DOM
+JavaScript uses the DOM to access and manipulate HTML documents. It can:
+- Find elements
+- Change elements
+- Add elements
+- Delete elements
+- React to events
+
+## Finding Elements
+
+### document.getElementById(id)
+Finds an element by its ID:
+```javascript
+const element = document.getElementById("myId");
+```
+
+### document.getElementsByTagName(name)
+Finds elements by tag name:
+```javascript
+const paragraphs = document.getElementsByTagName("p");
+```
+
+### document.getElementsByClassName(name)
+Finds elements by class name:
+```javascript
+const elements = document.getElementsByClassName("myClass");
+```
+
+### document.querySelectorAll()
+Finds all elements matching a CSS selector:
+```javascript
+// All paragraphs with class "highlight"
+const elements = document.querySelectorAll("p.highlight");
+// All elements with specific attribute
+const inputs = document.querySelectorAll("[data-type='special']");
+// Complex selectors
+const nested = document.querySelectorAll("div > p:first-child");
+```
+
+## Document Collections
+
+### document.links
+Returns all `<a>` and `<area>` elements:
+```javascript
+const anchors = document.links;
+console.log(anchors.length);
+```
+
+### document.forms
+Returns all `<form>` elements in the document:
+```javascript
+const forms = document.forms;
+const firstForm = forms[0];
+```
+
+### document.images
+Returns all `<img>` elements in the document:
+```javascript
+const images = document.images;
+console.log(images.length);
+```
+
+## Changing HTML Content
+
+### element.innerHTML
+Changes the HTML content of an element:
+```javascript
+element.innerHTML = "New content";
+```
+
+## Changing Attributes
+
+### Direct method
+```javascript
+element.attribute = "new value";
+element.src = "image.jpg";
+```
+
+### setAttribute method
+```javascript
+element.setAttribute("class", "highlight");
+```
+
+## Changing Styles
+
+### Using style property
+```javascript
+element.style.property = "new style";
+element.style.backgroundColor = "red";
+element.style.fontSize = "16px";
+```
+
+## Creating Elements
+
+### document.createElement()
+```javascript
+const div = document.createElement("div");
+```
+
+### document.appendChild()
+```javascript
+parent.appendChild(newElement);
+```
+
+## Removing Elements
+
+### removeChild()
+```javascript
+parent.removeChild(element);
+```
+
+## Replacing Elements
+
+### replaceChild()
+```javascript
+parent.replaceChild(newElement, oldElement);
+```
+
+## Nodes and NodeLists
+
+### Nodes
+A node is any DOM object in the document tree. Common node types:
+- Element nodes (tags)
+- Text nodes (text content)
+- Comment nodes (HTML comments)
+- Document node (the document itself)
+
+Node properties:
+```javascript
+node.parentNode
+node.childNodes
+node.firstChild
+node.lastChild
+node.nextSibling
+node.previousSibling
+```
+
+### NodeLists
+A NodeList is a collection of nodes. It's similar to an array but isn't one:
+```javascript
+const nodeList = document.querySelectorAll("p");
+// Convert to array if needed
+const array = Array.from(nodeList);
+```
+
+## Script Loading Strategies
+
+### defer
+Delays script execution until HTML document is fully parsed:
+```javascript
+<script defer src="script.js"></script>
+```
+- Downloads in parallel with HTML parsing
+- Executes in order
+- Only works for external scripts
+- Best for most scripts that need the entire DOM
+
+### async
+Loads and executes script asynchronously:
+```javascript
+<script async src="script.js"></script>
+```
+- Downloads in parallel with HTML parsing
+- Executes as soon as downloaded (can interrupt HTML parsing)
+- Order of execution not guaranteed
+- Best for independent scripts (analytics, ads)
+
+Comparison:
+![This image is from the HTML spec, copied and cropped to a reduced version, under CC BY 4.0 license terms.](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/async-defer.jpg)
