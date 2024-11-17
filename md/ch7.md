@@ -808,3 +808,184 @@ Loads and executes script asynchronously:
 
 Comparison:
 ![This image is from the HTML spec, copied and cropped to a reduced version, under CC BY 4.0 license terms.](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/async-defer.jpg)
+
+# JavaScript Events
+
+## What are events
+
+> Events are fired to notify code of "interesting changes" that may affect code execution. These can arise from user interactions such as using a mouse or resizing a window, changes in the state of the underlying environment (e.g. low battery or media events from the operating system), and other causes.
+
+[https://developer.mozilla.org/en-US/docs/Web/Events](https://developer.mozilla.org/en-US/docs/Web/Events)
+
+## Anonymous (Headless) Functions
+
+```javascript
+// Traditional named function
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+// Anonymous function expressions
+const greet1 = function(name) {
+    return `Hello, ${name}!`;
+};
+
+// Arrow function (also anonymous)
+const greet2 = (name) => `Hello, ${name}!`;
+```
+
+## Callables
+```js
+// Basic operator functions
+function add(a, b) {
+    return a + b;
+}
+
+function subtract(a, b) {
+    return a - b;
+}
+
+// Higher-order function that takes an operator function as argument
+function calculate(operatorFn) {
+    return operatorFn(5, 3);
+}
+
+console.log(calculate(add));
+console.log(calculate(subtract));
+```
+
+## Event Handlers Examples
+
+1. Traditional DOM Event Handlers:
+```javascript
+// HTML Element
+<button id="btn1">Traditional Handler</button>
+
+// JavaScript
+const btn1 = document.getElementById('btn1');
+btn1.onclick = function() {
+    alert('Button clicked!');
+};
+
+// Alternative syntax
+btn1.onclick = handleClick;
+function handleClick() {
+    alert('Button clicked!');
+}
+```
+
+2. addEventListener Method:
+```javascript
+// HTML Element
+<button id="btn2">Modern Handler</button>
+
+// JavaScript
+const btn2 = document.getElementById('btn2');
+btn2.addEventListener('click', function() {
+    alert('Button clicked!');
+});
+
+// With named function
+btn2.addEventListener('click', handleClick);
+function handleClick(event) {
+    alert('Button clicked!');
+    console.log(event); // Access event object
+}
+```
+
+3. Multiple Event Handlers:
+```javascript
+// HTML Element
+<div id="myDiv">Hover and Click me</div>
+
+// JavaScript
+const myDiv = document.getElementById('myDiv');
+
+// Multiple events on same element
+myDiv.addEventListener('click', function() {
+    console.log('Element clicked');
+});
+
+myDiv.addEventListener('mouseover', function() {
+    console.log('Mouse over element');
+});
+
+// Multiple handlers for same event
+myDiv.addEventListener('click', function() {
+    console.log('First click handler');
+});
+
+myDiv.addEventListener('click', function() {
+    console.log('Second click handler');
+});
+```
+
+4. Removing Event Listeners:
+```javascript
+// HTML Element
+<button id="btn3">Click me</button>
+
+// JavaScript
+const btn3 = document.getElementById('btn3');
+
+function handleClick() {
+    console.log('Button clicked');
+}
+
+// Add event listener
+btn3.addEventListener('click', handleClick);
+
+// Remove event listener
+btn3.removeEventListener('click', handleClick);
+```
+
+5. Event Object Properties:
+```javascript
+// HTML Element
+<input id="textInput" type="text">
+
+// JavaScript
+const textInput = document.getElementById('textInput');
+
+textInput.addEventListener('keydown', function(event) {
+    console.log('Key pressed:', event.key);
+    console.log('Key code:', event.keyCode);
+    console.log('Shift key pressed:', event.shiftKey);
+    console.log('Target element:', event.target);
+});
+```
+
+6. Event Delegation:
+```javascript
+// HTML Element
+<ul id="parentList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+
+// JavaScript
+const parentList = document.getElementById('parentList');
+
+parentList.addEventListener('click', function(event) {
+    if(event.target.tagName === 'LI') {
+        console.log('Clicked on:', event.target.textContent);
+    }
+});
+```
+
+7. Preventing Default Behavior:
+```javascript
+// HTML Element
+<form id="myForm">
+    <input type="submit" value="Submit">
+</form>
+
+// JavaScript
+const form = document.getElementById('myForm');
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevents form submission
+    console.log('Form submission prevented');
+});
+```
