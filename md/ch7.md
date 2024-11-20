@@ -1279,7 +1279,6 @@ This prevents content from being copied and optionally sets custom clipboard dat
 
             if (!validateTextInput(username)) isValid = false;
             if (!validateEmail(email)) isValid = false;
-            if (!validatePassword(password)) isValid = false;
             if (!validatePasswordMatch(password, confirmPassword)) isValid = false;
 
             if (isValid) {
@@ -1297,9 +1296,6 @@ This prevents content from being copied and optionally sets custom clipboard dat
                         break;
                     case 'email':
                         validateEmail(input);
-                        break;
-                    case 'password':
-                        validatePassword(input);
                         break;
                     case 'confirmPassword':
                         validatePasswordMatch(password, input);
