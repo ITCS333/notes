@@ -989,3 +989,326 @@ form.addEventListener('submit', function(event) {
     console.log('Form submission prevented');
 });
 ```
+
+7.1. Form Submission Prevention:
+```javascript
+const form = document.getElementById('myForm');
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Stops the form from submitting
+    // Your custom code here
+    console.log('Form submission prevented');
+});
+```
+This prevents the default form submission behavior, which would normally refresh the page or send data to a server. Useful when you want to handle form data with JavaScript instead.
+
+7.2. Link Click Prevention:
+```javascript
+const link = document.getElementById('myLink');
+link.addEventListener('click', function(event) {
+    event.preventDefault(); // Stops the link from navigating to its href
+    // Your custom code here
+    console.log('Link click prevented');
+});
+```
+This stops a link from navigating to its href attribute. Useful when you want to handle the click differently, like opening in a modal or performing an HTTP request.
+
+7.3. Right Click Prevention:
+```javascript
+element.addEventListener('contextmenu', function(event) {
+    event.preventDefault(); // Prevents the context menu from appearing
+    // Your custom code here
+    console.log('Right click prevented');
+});
+```
+This prevents the browser's context menu from appearing on right-click. Common in web apps where you want to implement custom right-click menus.
+
+7.4. Key Press Prevention:
+```javascript
+input.addEventListener('keypress', function(event) {
+    if (!isNaN(event.key)) { // If the key is a number
+        event.preventDefault(); // Prevents number input
+        console.log('Number input prevented');
+    }
+});
+```
+This prevents specific keys from being entered in an input field. Useful for creating custom input validation.
+
+7.5. Copy Prevention:
+```javascript
+document.addEventListener('copy', function(event) {
+    event.preventDefault(); // Prevents copying
+    // Optionally set custom clipboard data
+    event.clipboardData.setData('text/plain', 'Copying is not allowed');
+});
+```
+This prevents content from being copied and optionally sets custom clipboard data.
+
+## Form Validation
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation Example</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-field input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .error-message {
+            font-size: 14px;
+            color: #e74c3c;
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            display: none;
+        }
+
+        .form-field.error input {
+            border-color: #e74c3c;
+        }
+
+        .form-field.success input {
+            border-color: #4CAF50;
+        }
+
+        .form-field.error .error-message {
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .password-requirements {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Icons for success/error states */
+        .form-field::after {
+            position: absolute;
+            right: 10px;
+            top: 35px;
+            font-size: 18px;
+        }
+
+        .form-field.success::after {
+            content: '✓';
+            color: #4CAF50;
+        }
+
+        .form-field.error::after {
+            content: '✕';
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Sign Up Form</h2>
+        <form id="myForm" novalidate>
+            <div class="form-field">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username" autocomplete="username">
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter email" autocomplete="email">
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" autocomplete="new-password">
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                <div class="error-message"></div>
+            </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <script>
+        function validateTextInput(input) {
+            const value = input.value.trim();
+
+            if (value === '') {
+                showError(input, 'This field is required');
+                return false;
+            }
+            if (value.length < 3) {
+                showError(input, 'Must be at least 3 characters');
+                return false;
+            }
+
+            showSuccess(input);
+            return true;
+        }
+
+        const form = document.getElementById('myForm');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        function showError(input, message) {
+            const formField = input.parentElement;
+            formField.classList.remove('success');
+            formField.classList.add('error');
+            const error = formField.querySelector('.error-message');
+            error.textContent = message;
+        }
+
+        function showSuccess(input) {
+            const formField = input.parentElement;
+            formField.classList.remove('error');
+            formField.classList.add('success');
+            const error = formField.querySelector('.error-message');
+            error.textContent = '';
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const value = email.value.trim();
+
+            if (value === '') {
+                showError(email, 'Email is required');
+                return false;
+            }
+            if (!emailRegex.test(value)) {
+                showError(email, 'Please enter a valid email');
+                return false;
+            }
+
+            showSuccess(email);
+            return true;
+        }
+
+        function validatePasswordMatch(password, confirmPassword) {
+            if (confirmPassword.value === '') {
+                showError(confirmPassword, 'Please confirm your password');
+                return false;
+            }
+            if (password.value !== confirmPassword.value) {
+                showError(confirmPassword, 'Passwords do not match');
+                return false;
+            }
+
+            showSuccess(confirmPassword);
+            return true;
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            let isValid = true;
+
+            if (!validateTextInput(username)) isValid = false;
+            if (!validateEmail(email)) isValid = false;
+            if (!validatePassword(password)) isValid = false;
+            if (!validatePasswordMatch(password, confirmPassword)) isValid = false;
+
+            if (isValid) {
+                console.log('Form is valid, submitting...');
+                // form.submit();
+            }
+        });
+
+        const inputs = [username, email, password, confirmPassword];
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                switch (input.id) {
+                    case 'username':
+                        validateTextInput(input);
+                        break;
+                    case 'email':
+                        validateEmail(input);
+                        break;
+                    case 'password':
+                        validatePassword(input);
+                        break;
+                    case 'confirmPassword':
+                        validatePasswordMatch(password, input);
+                        break;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+```
