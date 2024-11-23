@@ -72,7 +72,7 @@ Craete an HTML page using the following code and test it and try to understand i
 </html>
 ```
 
-Creat the folloing JavaScript file in the same directory as the HTML file:
+Creat the following JavaScript file in the same directory as the HTML file:
 ```js
 // Cookie management functions
 function setCookie(name, value, days) {
