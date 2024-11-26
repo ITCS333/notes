@@ -2,7 +2,7 @@
 
 ## Code
 
-Craete an HTML page using the following code and test it and try to understand it.
+Create an HTML page using the following code, test it, and try to understand it.
 
 ```html
 <!DOCTYPE html>
@@ -72,7 +72,7 @@ Craete an HTML page using the following code and test it and try to understand i
 </html>
 ```
 
-Creat the following JavaScript file in the same directory as the HTML file:
+Create the following JavaScript file in the same directory as the HTML file:
 ```js
 // Cookie management functions
 function setCookie(name, value, days) {
