@@ -74,33 +74,29 @@ Create an HTML page using the following code, test it, and try to understand it.
 
 Create the following JavaScript file in the same directory as the HTML file:
 ```js
-// Cookie management functions
-function setCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + value + expires + "; path=/";
+// Cookie Management
+function setCookie(name, value) {
+    document.cookie = name + "=" + value;
+
 }
 
 function getCookie(name) {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
+    const cookie = document.cookie
+        .split(';')
+        .find(c => c.trim().startsWith(name + "="));
+
+    if (cookie)
+        return cookie.substring(name.length + 1);
+    else
+        return null;
+
 }
 
 // Theme management
 function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     document.getElementById('theme-selector').value = theme;
-    setCookie('theme', theme, 365);
+    setCookie('theme', theme);
 }
 
 // Filter management
@@ -124,10 +120,9 @@ function filterItems(filterValue) {
 // Create list item element
 function createListItem(text, completed = false) {
     const li = document.createElement('li');
-    const article = document.createElement('article');
 
-    article.innerHTML = `
-        <div class="grid">
+    li.innerHTML = `
+        <article><div class="grid">
             <span class="${completed ? 'completed' : ''}">${text}</span>
             <div>
                 <button class="complete-btn outline ${completed ? 'secondary' : ''}">
@@ -135,13 +130,13 @@ function createListItem(text, completed = false) {
                 </button>
                 <button class="delete-btn contrast">Delete</button>
             </div>
-        </div>
+        </div></article>
     `;
 
     // Complete button event
-    article.querySelector('.complete-btn').addEventListener('click', function (event) {
+    li.querySelector('.complete-btn').addEventListener('click', function (event) {
         event.stopPropagation();
-        const span = article.querySelector('span');
+        const span = li.querySelector('span');
         span.classList.toggle('completed');
         this.textContent = span.classList.contains('completed') ? 'Undo' : 'Complete';
         this.classList.toggle('secondary');
@@ -150,13 +145,12 @@ function createListItem(text, completed = false) {
     });
 
     // Delete button event
-    article.querySelector('.delete-btn').addEventListener('click', function (event) {
+    li.querySelector('.delete-btn').addEventListener('click', function (event) {
         event.stopPropagation();
         li.remove();
         saveItems();
     });
 
-    li.appendChild(article);
     return li;
 }
 
@@ -182,6 +176,7 @@ function saveItems() {
 document.addEventListener('DOMContentLoaded', function () {
     // Load theme
     const savedTheme = getCookie('theme') || 'light';
+    console.log("savedTheme: " + savedTheme);
     setTheme(savedTheme);
 
     // Load items
