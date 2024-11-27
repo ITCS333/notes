@@ -1043,7 +1043,81 @@ document.addEventListener('copy', function(event) {
 ```
 This prevents content from being copied and optionally sets custom clipboard data.
 
-## Form Validation
+# JavaScript Fetch
+
+```js
+async function getData() {
+    const url = "https://data.gov.bh/api/explore/v2.1/catalog/datasets/01-statistics-of-students-nationalities_updated/records?where=colleges%20like%20%22IT%22%20AND%20the_programs%20like%20%22bachelor%22&limit=100";
+    const responce = await fetch(url);
+    console.log(responce.ok);
+    console.log(responce.status);
+    console.log(responce.statusText);
+    console.log(responce.headers);
+
+    const data = await responce.json();
+
+    data.results.forEach(element => {
+        console.log(element);   
+    });
+}
+
+getData();
+```
+**Explination:**
+
+```javascript
+async function getData() {
+```
+- Declares an asynchronous function named `getData` that can use `await` operations
+
+```javascript
+const url = "https://data.gov.bh/api/explore/v2.1/catalog/datasets/01-statistics-of-students-nationalities_updated/records?where=colleges%20like%20%22IT%22%20AND%20the_programs%20like%20%22bachelor%22&limit=100";
+```
+- Stores the API endpoint URL in a constant variable
+- This URL requests student nationality statistics for IT college bachelor programs
+
+```javascript
+const responce = await fetch(url);
+```
+- Makes an HTTP request to the URL using `fetch`
+- `await` pauses execution until the fetch request completes
+- Stores the response object in `responce` variable
+
+```javascript
+console.log(responce.ok);
+console.log(responce.status);
+console.log(responce.statusText);
+console.log(responce.headers);
+```
+- Logs various properties of the response:
+  - `ok`: Boolean indicating if response was successful (status 200-299)
+  - `status`: HTTP status code
+  - `statusText`: Status message
+  - `headers`: Response headers
+
+```javascript
+const data = await responce.json();
+```
+- Parses the response body as JSON
+- `await` waits for:
+    - Streaming: First, it waits for all the response body data to be downloaded/streamed from the server
+    - Parsing: Then, it waits for the complete JSON string to be parsed into a JavaScript object
+- Stores parsed JSON data in `data` variable
+
+```javascript
+data.results.forEach(element => {
+    console.log(element);   
+});
+```
+- Iterates through each element in the `results` array of the parsed data
+- Logs each element to the console
+
+```javascript
+getData();
+```
+- Calls the `getData` function to execute the code
+
+# Form Validation
 ```html
 <!DOCTYPE html>
 <html lang="en">
